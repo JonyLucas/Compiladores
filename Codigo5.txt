@@ -1,0 +1,18 @@
+Program teste;
+  {O Procedimento fará a troca dos valores de duas variaveis}
+  var x, y: integer;  
+  procedure troca(valor_1, valor_2: integer);
+  var aux: integer;
+  begin
+    aux := valor_1;
+    valor_1 := valor_2;
+    valor_2 := aux;
+  end;
+
+  begin
+    clrscr;
+    //readln(x);
+    //readln(y);
+    //troca(x, y);
+    readkey;
+  end.

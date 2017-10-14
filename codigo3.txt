@@ -1,0 +1,57 @@
+program teste; {programa exemplo}
+var
+	valor, x, y: integer;
+	N1,N2,N3, S, M : Real;
+	Result : Boolean;
+
+Procedure proc1 (val : integer);
+	var 
+		v1, N2 : Real;
+		N1 : Integer;
+
+	Begin
+		v1 := 5.5;
+		N2 := 4.5;
+		N2 := N2 + v1;
+		N1 := val + 10;
+		val := N1;
+	End;
+
+
+Procedure proc2 (val, val2, val3 : integer);
+	var 
+		a, b : Real;
+		c : integer;
+	Begin
+		a := 5.5;
+		N2 := 4.5;
+		N2 := N2 + a;
+		c := 10;
+		proc2(c, c, c);
+		proc1(c);
+		//proc1(a); //Erro, incompatibilidade de tipos
+	End;
+
+Begin
+		N1:= 7.5 ;
+		N2:= 5.5 ;
+		N3:= 4.5 ;
+		S:=N1+N2+N3;
+		M:=S/3;
+		if M >= 5 Then
+		begin
+			Result:=True;
+			x := x + 2;
+		end
+		else
+			Result:=False; //Verificar o END e o clear_escope
+
+		do
+		begin
+			y := x+y;
+			x := 1;
+		end
+		while(x < y)
+		//x := x + 2
+
+End.

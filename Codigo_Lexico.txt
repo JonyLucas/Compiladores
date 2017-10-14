@@ -1,0 +1,22 @@
+Program resultado; {Comentario}
+	Var N1,N2,N3 : Real;
+	{var i1 : Integer;}
+	//Testando;
+	//ifer ; //123456
+	S,M : Real; ////Teste123 456
+	Result, booleana : Boolean;
+
+	Begin
+		N1:= 7.5 ;
+		N2:= 5.5 ;
+		N3:= 4.5 ;
+		//N4:= 92i32;
+		//N6:= 56i- 5;
+		//N5:= 56-40;
+		S:=N1+N2+N3;
+		M:=S/3;
+		if M >= 5 Then
+			Result:=True
+		else
+			Result:=False;
+	End.
