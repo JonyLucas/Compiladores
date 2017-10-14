@@ -1,5 +1,3 @@
-package analisador_lexico;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,11 +17,11 @@ public class AnalisadorLexico {
 		
 		char c;
 		
-		System.out.println("Inicio da analise LÈxica\n");
+		System.out.println("Inicio da analise L√©xica\n");
 		
 		while(bf.ready()){
 			c = (char) bf.read();
-			if(c == ' ' || c == '\t' || c == '\r'){ //Desconsidera espaÁo em branco
+			if(c == ' ' || c == '\t' || c == '\r'){ //Desconsidera espa√ßo em branco
 				continue;
 			}
 			if(c == '\n'){ //Conta linha
@@ -36,7 +34,7 @@ public class AnalisadorLexico {
 				while(c != '}'){
 					c = (char) bf.read();
 					if(!bf.ready()){
-						System.out.println("Erro: Coment·rio n„o fechado");
+						System.out.println("Erro: Coment√°rio n√£o fechado");
 						break;
 					}
 				}
@@ -59,25 +57,25 @@ public class AnalisadorLexico {
 			
 			//System.out.println(c);
 			
-			if((65 <= c && c <= 90) || (97 <= c && c <= 122)){ //Verifica se C È uma letra
+			if((65 <= c && c <= 90) || (97 <= c && c <= 122)){ //Verifica se C √© uma letra
 				if(check_token(c))
-					;//System.out.println("Identificador v·lido");
+					;//System.out.println("Identificador v√°lido");
 				else
-					System.out.println("Erro: identificador inv·lido");
+					System.out.println("Erro: identificador inv√°lido");
 			}
-			else if(48 <= c && c <= 57){ //Verifica se C È um numero
+			else if(48 <= c && c <= 57){ //Verifica se C √© um numero
 				if(check_number(c));
 				else{
-					System.out.println("Erro, N˙mero inv·lido");
+					System.out.println("Erro, N√∫mero inv√°lido");
 					break;
 				}
 				
-			}else if(c == ';' || c == '.' || c == '(' || c == ')' || c == ',' || c == ':'){ //Verifica se C È um delimitador
-				if(c == ':'){ //Verifica se È o operador de atribuiÁ„o
+			}else if(c == ';' || c == '.' || c == '(' || c == ')' || c == ',' || c == ':'){ //Verifica se C √© um delimitador
+				if(c == ':'){ //Verifica se √© o operador de atribui√ß√£o
 					bf.mark(2);
 					char aux = (char)bf.read();
-					if(aux == '='){ //Operador de atribuiÁ„o
-						String[] s = {Character.toString(c) + Character.toString(aux), "Operador de AtribuiÁ„o", Integer.toString(nLine)};
+					if(aux == '='){ //Operador de atribui√ß√£o
+						String[] s = {Character.toString(c) + Character.toString(aux), "Operador de Atribui√ß√£o", Integer.toString(nLine)};
 						token_table.add(s);
 						continue;
 					}
@@ -114,8 +112,8 @@ public class AnalisadorLexico {
 	/**----------------------------------------------------------------------------------------------------------------------------------------------**/
 	
 	public void show_table(){
-		System.out.println("\nTabela de SÌmbolos");
-		System.out.println("Token\t\t\tClassificaÁ„o\t\t\tLinha");
+		System.out.println("\nTabela de S√≠mbolos");
+		System.out.println("Token\t\t\tClassifica√ß√£o\t\t\tLinha");
 		int size = token_table.size();
 		for(int i = 0; i < size; i++){
 			String l1 = token_table.get(i)[0], l2 = token_table.get(i)[1], l3 = token_table.get(i)[2];
@@ -150,7 +148,7 @@ public class AnalisadorLexico {
 				while(c != '}')
 					c = (char) bf.read();
 				if(!bf.ready()){
-					System.out.println("Erro: Coment·rio n„o fechado");
+					System.out.println("Erro: Coment√°rio n√£o fechado");
 					break;
 				}					
 				continue;
@@ -161,8 +159,8 @@ public class AnalisadorLexico {
 		
 		System.out.println("word: " + word);
 		
-		if(word.matches("\\w[\\w|\\d|\\_]*")){ //Representa um identificador v·lido, tanto para uma vari·vel quanto para uma palavra chave
-			/**Verifica se È uma palavra chave, comparando-o com todas as possÌveis palavras chaves**/
+		if(word.matches("\\w[\\w|\\d|\\_]*")){ //Representa um identificador v√°lido, tanto para uma vari√°vel quanto para uma palavra chave
+			/**Verifica se √© uma palavra chave, comparando-o com todas as poss√≠veis palavras chaves**/
 			if(word.matches("[Bb]oolean") || word.matches("[Bb]egin") || word.matches("[Ii]nteger") || word.matches("[Ii]f") || word.matches("[Ee]lse") || 
 			word.matches("[Ee]nd") || word.matches("[Vv]ar") || word.matches("[Rr]eal") || word.matches("[Tt]hen") || word.matches("[Pp]rogram") ||
 			word.matches("[Pp]rocedure") || word.matches("[Ww]hile") || word.matches("[Dd]o") || word.matches("[Nn]ot"))
@@ -173,8 +171,8 @@ public class AnalisadorLexico {
 			}else if(word.matches("or")){
 				String[] s = {word, "Operador Aditivo", Integer.toString(nLine)};
 				token_table.add(s);
-			}else if(word.matches("[Tt]rue") || word.matches("[Ff]alse")){ //Linha adicionada (n„o est· na especificaÁ„o do lÈxico) para n„o classificar as palavras True e False como Identificadores 
-				String[] s = {word, "Valor lÛgico", Integer.toString(nLine)};
+			}else if(word.matches("[Tt]rue") || word.matches("[Ff]alse")){ //Linha adicionada (n√£o est√° na especifica√ß√£o do l√©xico) para n√£o classificar as palavras True e False como Identificadores 
+				String[] s = {word, "Valor l√≥gico", Integer.toString(nLine)};
 				token_table.add(s);
 			}else
 				add_id(word);
@@ -221,7 +219,7 @@ public class AnalisadorLexico {
 				while(c != '}')
 					c = (char) bf.read();
 				if(!bf.ready()){
-					System.out.println("Erro: Coment·rio n„o fechado");
+					System.out.println("Erro: Coment√°rio n√£o fechado");
 					break;
 				}	
 				continue;
@@ -263,17 +261,17 @@ public class AnalisadorLexico {
 		
 		if(word.matches("\\d+\\.\\d+")){
 			System.out.println("Numero Real");
-			String[] s = {word, "N˙mero Real", Integer.toString(nLine)};
+			String[] s = {word, "N√∫mero Real", Integer.toString(nLine)};
 			token_table.add(s);
 			final_state = true;
 		}else if(word.matches("\\d+")){
 			System.out.println("Numero Inteiro");
-			String[] s = {word, "N˙mero Inteiro", Integer.toString(nLine)};
+			String[] s = {word, "N√∫mero Inteiro", Integer.toString(nLine)};
 			token_table.add(s);
 			final_state = true;
 		}else if(word.matches("\\d+i[+-]\\d+")){
 			System.out.println("Numero Complexo");
-			String[] s = {word, "N˙mero Complexo", Integer.toString(nLine)};
+			String[] s = {word, "N√∫mero Complexo", Integer.toString(nLine)};
 			token_table.add(s);
 			final_state = true;
 		}
