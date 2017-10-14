@@ -1,5 +1,3 @@
-package analisador_sintatico;
-
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.HashMap;
@@ -10,9 +8,9 @@ public class AnalisadorSintatico {
 	private ArrayList<String[]> token_table; //Tabela de token retornada pelo analisador lexico
 	private Stack<String> symbol_table; //Pilha para implementar a tabela de simbolos
 	private Stack<String> type_stack; //Pilha para implementar a tabela de tipos, a uniao entre symbol_table e type_table funcionaria como um HashMap, onde o indice mapeia os elementos das duas pilhas
-	private Stack<String> type_control_stack; //Pilha de controle de tipo (PcT), ser· usada nos comandos de atribuiÁao, expressao aritmetica, relacional e logica
-	private Stack<String> operation_stack; //Pilha para armazenar as operaÁoes, forma que utilizei para solucionar a verificaÁao de tipos
-	private HashMap<String, ArrayList<String>> procedures_parameters; //Usado para fazer a checagem de tipos na ativaÁ„o de procedimentos
+	private Stack<String> type_control_stack; //Pilha de controle de tipo (PcT), ser√° usada nos comandos de atribui√ßao, expressao aritmetica, relacional e logica
+	private Stack<String> operation_stack; //Pilha para armazenar as opera√ßoes, forma que utilizei para solucionar a verifica√ßao de tipos
+	private HashMap<String, ArrayList<String>> procedures_parameters; //Usado para fazer a checagem de tipos na ativa√ß√£o de procedimentos
 	private int nLine; //Linha corrente de leitura da tabela
 	private String[] token; //Variavel utilizada para resgatar uma linha da tabela de tokens
 	
@@ -27,7 +25,7 @@ public class AnalisadorSintatico {
 	}
 	
 	public void analisar(){
-		System.out.println("Inicio da analise sint·tica/sem‚ntica\n");
+		System.out.println("Inicio da analise sint√°tica/sem√¢ntica\n");
 		token = next();
 		if(token[0].matches("[Pp]rogram")){
 			symbol_table.push("$"); //Dermarca o inicio do escopo
@@ -50,10 +48,10 @@ public class AnalisadorSintatico {
 								System.out.println("Erro: Falha nos comandos compostos na linha " + token[2]);
 							}
 						}else{
-							System.out.println("Erro: Falha nas declaraÁıes de subprogramas na linha " + token[2]);
+							System.out.println("Erro: Falha nas declara√ß√µes de subprogramas na linha " + token[2]);
 						}
 					}else{
-						System.out.println("Erro: Falha na declaraÁ„o de vari·veis na linha " + token[2]);
+						System.out.println("Erro: Falha na declara√ß√£o de vari√°veis na linha " + token[2]);
 					}
 				}else{
 					System.out.println("Erro: Delimitador \';\' era esperado na linha " + token[2]);
@@ -68,7 +66,7 @@ public class AnalisadorSintatico {
 		}
 	}
 	
-	/**------Resgata a prÛxima linha da tabela de tokens------**/
+	/**------Resgata a pr√≥xima linha da tabela de tokens------**/
 	private String[] next(){
 		System.out.println("token lido: " + token_table.get(nLine)[0]);
 		return token_table.get(nLine++);
@@ -97,7 +95,7 @@ public class AnalisadorSintatico {
 		return false;
 	}
 	
-	/**------Retorna a ultima posiÁao (na representaÁao de Vector) do identificador correspondente------**/
+	/**------Retorna a ultima posi√ßao (na representa√ßao de Vector) do identificador correspondente------**/
 	private int get_last_index(String id){
 		int size = symbol_table.size();
 		for(int i = size-1; i >= 0; i--){
@@ -114,7 +112,7 @@ public class AnalisadorSintatico {
 		return type_stack.get(index);
 	}
 	
-	/**------Adiciona o id do procedure e os seus par‚metros formais no hashMap------**/
+	/**------Adiciona o id do procedure e os seus par√¢metros formais no hashMap------**/
 	private void add_proc_parameter(String id_proc, String id_arg){
 		if(!id_proc.equals(""))
 			procedures_parameters.get(id_proc).add(id_arg);
@@ -141,13 +139,13 @@ public class AnalisadorSintatico {
 	/**------Verifica os tipos de argumentos de um procedure------**/
 	private boolean verify_arguments(String id_proc){
 		ArrayList<String> parameters = get_parameters(id_proc);
-		System.out.println("Par‚metros de " + id_proc + ": " + parameters);
+		System.out.println("Par√¢metros de " + id_proc + ": " + parameters);
 		System.out.println("Argumentos: " + arguments);
 		
 		int size_p = parameters.size(), size_a = arguments.size();
 		
 		if(size_p != size_a){
-			System.out.println("Erro Sem‚ntico: Quantidade de argumentos n„o corresponde ‡ quantidade de par‚metros");
+			System.out.println("Erro Sem√¢ntico: Quantidade de argumentos n√£o corresponde √† quantidade de par√¢metros");
 			return false;
 		}
 		
@@ -158,7 +156,7 @@ public class AnalisadorSintatico {
 			arg = arguments.get(i).toLowerCase();
 			
 			if(!param.equals(arg)){
-				System.out.println("Erro Sem‚ntico: Tipos de argumentos n„o correspondem");
+				System.out.println("Erro Sem√¢ntico: Tipos de argumentos n√£o correspondem");
 				return false;
 			}
 		}
@@ -173,28 +171,28 @@ public class AnalisadorSintatico {
 		String op2 = type_control_stack.pop();
 		
 		if(op1.matches("[Pp]rogram") || op2.matches("[Pp]rogram")){
-			System.out.println("Erro: N„o È permitido operaÁıes com o identificador do programa");
+			System.out.println("Erro: N√£o √© permitido opera√ß√µes com o identificador do programa");
 			return false;
 		}
 		
 		if(op1.matches("[Ii]nteger") && op2.matches("[Ii]nteger")){
 			type_control_stack.push("integer");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else if(op1.matches("[Ii]nteger") && op2.matches("[Rr]eal")){
 			type_control_stack.push("real");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else if(op1.matches("[Rr]eal") && op2.matches("[Ii]nteger")){
 			type_control_stack.push("real");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else if(op1.matches("[Rr]eal") && op2.matches("[Rr]eal")){
 			type_control_stack.push("real");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else{
-			System.out.println("Erro Sem‚ntico: Incompatibilidade entre os tipos " + op2 + " e " + op1);
+			System.out.println("Erro Sem√¢ntico: Incompatibilidade entre os tipos " + op2 + " e " + op1);
 			return false;
 		}
 	}
@@ -206,97 +204,97 @@ public class AnalisadorSintatico {
 		String op2 = type_control_stack.pop();
 		
 		if(op1.matches("[Pp]rogram") || op2.matches("[Pp]rogram")){
-			System.out.println("Erro: N„o È permitido operaÁıes com o identificador do programa");
+			System.out.println("Erro: N√£o √© permitido opera√ß√µes com o identificador do programa");
 			return false;
 		}
 		
 		if(op1.matches("[Ii]nteger") && op2.matches("[Ii]nteger")){
 			type_control_stack.push("boolean");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else if(op1.matches("[Ii]nteger") && op2.matches("[Rr]eal")){
 			type_control_stack.push("boolean");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else if(op1.matches("[Rr]eal") && op2.matches("[Ii]nteger")){
 			type_control_stack.push("boolean");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else if(op1.matches("[Rr]eal") && op2.matches("[Rr]eal")){
 			type_control_stack.push("boolean");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else{
-			System.out.println("Erro Sem‚ntico: Incompatibilidade entre os tipos " + op2 + " e " + op1);
+			System.out.println("Erro Sem√¢ntico: Incompatibilidade entre os tipos " + op2 + " e " + op1);
 			return false;
 		}
 	}
 	
-	/**------Verifica o tipo de expressao (tipo de retorno) lÛgica e atualiza o pct------**/
+	/**------Verifica o tipo de expressao (tipo de retorno) l√≥gica e atualiza o pct------**/
 	private boolean verify_logic_expression(String operation){
 		//System.out.println(type_control_stack);
 		String op1 = type_control_stack.pop();
 		String op2 = type_control_stack.pop();
 		
 		if(op1.matches("[Pp]rogram") || op2.matches("[Pp]rogram")){
-			System.out.println("Erro: N„o È permitido operaÁıes com o identificador do programa");
+			System.out.println("Erro: N√£o √© permitido opera√ß√µes com o identificador do programa");
 			return false;
 		}
 		
 		if(op1.matches("[Bb]oolean") && op2.matches("[Bb]oolean")){
 			type_control_stack.push("boolean");
-			System.out.println("OperaÁ„o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op1 + " " + operation + " " + op2 + " - \'OK\'");
 			return true;
 		}else{
-			System.out.println("Erro Sem‚ntico: Tipos incompatÌveis na operaÁ„o lÛgica");
+			System.out.println("Erro Sem√¢ntico: Tipos incompat√≠veis na opera√ß√£o l√≥gica");
 			return false;
 		}
 	}
 	
-	/**------Verifica a compatibilidade de tipos em uma operaÁao de atribuiÁao------**/
+	/**------Verifica a compatibilidade de tipos em uma opera√ßao de atribui√ßao------**/
 	private boolean verify_atribution(){
 		//System.out.println(type_control_stack);
 		String op1 = type_control_stack.pop(); //Tipo da expressao
 		String op2 = type_control_stack.pop(); //Tipo da variavel que recebe o valor da expressao
 		
 		if(op1.matches("[Pp]rogram") || op2.matches("[Pp]rogram")){
-			System.out.println("Erro: N„o È permitido operaÁıes com o identificador do programa");
+			System.out.println("Erro: N√£o √© permitido opera√ß√µes com o identificador do programa");
 			return false;
 		}
 		
 		if(op2.matches("[Rr]eal") && (op1.matches("[Ii]nteger") || op1.matches("[Rr]eal"))){
-			System.out.println("OperaÁ„o: " + op2 + ":= " + op1 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op2 + ":= " + op1 + " - \'OK\'");
 			return true;
 		}else if(op2.matches("[Ii]nteger") && op1.matches("[Ii]nteger")){
-			System.out.println("OperaÁ„o: " + op2 + ":= " + op1 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op2 + ":= " + op1 + " - \'OK\'");
 			return true;
 		}else if(op2.matches("[Bb]oolean") && op1.matches("[Bb]oolean")){
-			System.out.println("OperaÁ„o: " + op2 + ":= " + op1 + " - \'OK\'");
+			System.out.println("Opera√ß√£o: " + op2 + ":= " + op1 + " - \'OK\'");
 			return true;
 		}else{
-			System.out.println("Erro Sem‚ntico: Incompatibilidade entre os tipos " + op2 + " e " + op1);
+			System.out.println("Erro Sem√¢ntico: Incompatibilidade entre os tipos " + op2 + " e " + op1);
 			return false;
 		}
 		
 	}
 	
-	/**------Verifica o tipo de retorno da ultima express„o (topo da pilha) computada------**/
+	/**------Verifica o tipo de retorno da ultima express√£o (topo da pilha) computada------**/
 	private String check_type_expression(){
 		return type_control_stack.pop();
 	}
 	
-	/**------Verifica a operaÁ„o (bin·ria)------**/
+	/**------Verifica a opera√ß√£o (bin√°ria)------**/
 	private boolean verify_operation(){
 		System.out.println("Tipos dos operandos: " + type_control_stack);
-		System.out.println("OperaÁıes: " + operation_stack);
+		System.out.println("Opera√ß√µes: " + operation_stack);
 		
 		String operation = operation_stack.pop();
-		if(operation.matches("\\+") || operation.matches("\\-") || operation.matches("\\/") || operation.matches("\\*")){//Verifica se È um operador aritmetico
+		if(operation.matches("\\+") || operation.matches("\\-") || operation.matches("\\/") || operation.matches("\\*")){//Verifica se √© um operador aritmetico
 			if(verify_aritmetic_expression_type(operation)){
 				System.out.println("Tipo do resultado: " + type_control_stack.peek() + "\n");
 				return true;
 			}else{
-				System.out.println("Erro Sem‚ntico: na operaÁ„o " + operation);
+				System.out.println("Erro Sem√¢ntico: na opera√ß√£o " + operation);
 				return false;
 			}
 		}else if(operation.equals("<") || operation.equals(">") || operation.equals("=") || operation.equals("<>") || operation.equals("<=") || operation.equals(">=")){
@@ -304,22 +302,22 @@ public class AnalisadorSintatico {
 				System.out.println("Tipo do resultado: " + type_control_stack.peek() + "\n");
 				return true;
 			}else{
-				System.out.println("Erro Sem‚ntico: na operaÁ„o: " + operation);
+				System.out.println("Erro Sem√¢ntico: na opera√ß√£o: " + operation);
 				return false;
 			}
-		}else if(operation.matches("[Aa]nd") || operation.matches("[Oo]r") || operation.matches("[Nn]ot")){//Verifica se È um operador lÛgico
+		}else if(operation.matches("[Aa]nd") || operation.matches("[Oo]r") || operation.matches("[Nn]ot")){//Verifica se √© um operador l√≥gico
 			if(verify_logic_expression(operation)){
 				System.out.println("Tipo do resultado: " + type_control_stack.peek() + "\n");
 				return true;
 			}else{
-				System.out.println("Erro Sem‚ntico: na operaÁ„o: " + operation);
+				System.out.println("Erro Sem√¢ntico: na opera√ß√£o: " + operation);
 				return false;
 			}
 		}else if(operation.equals(":=")){
 			if(verify_atribution()){
 				return true;
 			}else{
-				System.out.println("Erro Sem‚ntico: na operaÁ„o: " + operation);
+				System.out.println("Erro Sem√¢ntico: na opera√ß√£o: " + operation);
 				return false;
 			}
 		}
@@ -338,15 +336,15 @@ public class AnalisadorSintatico {
 	private boolean addId_symbol_table(String id){
 		if(!check_scope_symbol_table(id)){
 			symbol_table.push(id);
-			System.out.println("Identificador adicionado na Tabela de sÌmbolos\nTabela de Simbolos: " + symbol_table);
+			System.out.println("Identificador adicionado na Tabela de s√≠mbolos\nTabela de Simbolos: " + symbol_table);
 			return true;
 		}else{
-			System.out.println("Erro Sem‚ntico: identificador \'" + token[0] + "\' j· foi declarado no escopo");
+			System.out.println("Erro Sem√¢ntico: identificador \'" + token[0] + "\' j√° foi declarado no escopo");
 			return false;
 		}
 	}
 	
-	/**------Adiciona o identificador do programa, usado para impedir a declaraÁao de vari·veis com o mesmo identificador do programa------**/
+	/**------Adiciona o identificador do programa, usado para impedir a declara√ßao de vari√°veis com o mesmo identificador do programa------**/
 	private void push_program_id(){
 		String id = symbol_table.get(1); //Indice do identificador do programa
 		//System.out.println("id do programa: " + id);
@@ -354,7 +352,7 @@ public class AnalisadorSintatico {
 		type_stack.push("program");
 	}
 	
-	/**------Limpa a pilha atÈ o marcador $------**/
+	/**------Limpa a pilha at√© o marcador $------**/
 	private void clear_scope(){
 		String top = symbol_table.pop();
 		type_stack.pop();
@@ -380,13 +378,13 @@ public class AnalisadorSintatico {
 	
 	/**----------------------------------------------------------------------------------------------------------------------------------------------**/
 	
-	/**------DeclaraÁ„o de vari·veis------**/
+	/**------Declara√ß√£o de vari√°veis------**/
 	private boolean variable_dec(){
-		System.out.println("\nDeclaraÁ„o de vari·veis");
+		System.out.println("\nDeclara√ß√£o de vari√°veis");
 		if(token[0].matches("[Vv]ar")){
 			token = next();
 			if(var_dec_list()){
-				System.out.println("DeclaraÁ„o de vari·veis - \'Ok\'");
+				System.out.println("Declara√ß√£o de vari√°veis - \'Ok\'");
 				return true;
 			}else
 				return false;
@@ -397,7 +395,7 @@ public class AnalisadorSintatico {
 	
 	/**----------------------------------------------------------------------------------------------------------------------------------------------**/
 	
-	/**------Lista de declaraÁıes de vari·veis------**/
+	/**------Lista de declara√ß√µes de vari√°veis------**/
 	private boolean var_dec_list(){
 		
 		if(id_list(false)){			
@@ -408,7 +406,7 @@ public class AnalisadorSintatico {
 				
 				if(token[0].matches(";")){
 
-					System.out.println("Lista de declaraÁıes de vari·veis - \'Ok\'\n");
+					System.out.println("Lista de declara√ß√µes de vari√°veis - \'Ok\'\n");
 					token = next();
 					if(vdl()){
 						return true;
@@ -430,14 +428,14 @@ public class AnalisadorSintatico {
 		}
 	}
 	
-	/**---EliminaÁ„o da recursividade a esquerda---**/
+	/**---Elimina√ß√£o da recursividade a esquerda---**/
 	private boolean vdl(){
 		if(id_list(false)){			
 			if(token[0].matches(":")){		
 				token = next();
 				if(check_type()){
 					if(token[0].matches(";")){
-						System.out.println("Lista de declaraÁıes de vari·veis - \'Ok\'\n");
+						System.out.println("Lista de declara√ß√µes de vari√°veis - \'Ok\'\n");
 						token = next();
 						if(vdl())
 							return true;
@@ -460,7 +458,7 @@ public class AnalisadorSintatico {
 	
 	/**----------------------------------------------------------------------------------------------------------------------------------------------**/
 	
-	int countId; //Usado para fazer a contagem de identificadores na lista de identificadores, essa contagem ser· utilizada para atribuir os tipos aos identificadores
+	int countId; //Usado para fazer a contagem de identificadores na lista de identificadores, essa contagem ser√° utilizada para atribuir os tipos aos identificadores
 	
 	/**------Lista de identificadores------**/
 	private boolean id_list(boolean argument){ //Argumento utilizado para especificar se a lista de identificadores corresponde aos argumentos de algum procedure
@@ -484,7 +482,7 @@ public class AnalisadorSintatico {
 		}
 	}
 	
-	/**---EliminaÁ„o da recursividade a esquerda---**/
+	/**---Elimina√ß√£o da recursividade a esquerda---**/
 	private boolean il(boolean argument){
 		if(token[0].matches(",")){
 			token = next();
@@ -516,16 +514,16 @@ public class AnalisadorSintatico {
 			token = next();
 			return true;
 		}else{
-			System.out.println("Erro: tipo inv·lido na linha " + token[2]);
+			System.out.println("Erro: tipo inv√°lido na linha " + token[2]);
 			return false;
 		}
 	}
 	
 	/**----------------------------------------------------------------------------------------------------------------------------------------------**/
 	
-	/**------DeclaraÁıes de subprogramas------**/
+	/**------Declara√ß√µes de subprogramas------**/
 	private boolean subprogram_dec(){
-		System.out.println("\nDeclaraÁıes de subprogramas");		
+		System.out.println("\nDeclara√ß√µes de subprogramas");		
 		if(sub_dec()){
 			if(token[0].matches(";")){
 				token = next();
@@ -543,9 +541,9 @@ public class AnalisadorSintatico {
 		}
 	}
 	
-	String proc_id = ""; //Usado para guarda o id do procedure atual para relacion·-lo ao seus argumentos
+	String proc_id = ""; //Usado para guarda o id do procedure atual para relacion√°-lo ao seus argumentos
 	
-	/**------DeclaraÁ„o de subprograma------**/
+	/**------Declara√ß√£o de subprograma------**/
 	private boolean sub_dec(){
 		if(token[0].matches("[Pp]rocedure")){
 			token = next();
@@ -560,7 +558,7 @@ public class AnalisadorSintatico {
 				symbol_table.push("$"); //Novo escopo
 				type_stack.push("$");
 				
-				push_program_id(); //Impede a declaraÁ„o de vari·veis com o mesmo identificador do programa
+				push_program_id(); //Impede a declara√ß√£o de vari√°veis com o mesmo identificador do programa
 				
 				token = next();
 				if(arguments()){
@@ -574,7 +572,7 @@ public class AnalisadorSintatico {
 									return false; //Falha no comando composto
 								}	
 							}else{
-								return false; //Falha na declaraÁao de subprograma
+								return false; //Falha na declara√ßao de subprograma
 							}
 						}else{
 							return false; //Falha na declaracao de variaveis
@@ -602,7 +600,7 @@ public class AnalisadorSintatico {
 				if(token[0].matches("\\)")){
 					token = next();
 					update_proc_parameter(proc_id);
-					System.out.println("Par‚metros de " + proc_id + ": " + procedures_parameters.get(proc_id));
+					System.out.println("Par√¢metros de " + proc_id + ": " + procedures_parameters.get(proc_id));
 					System.out.println("Argumentos - \'Ok\'");
 					return true;
 				}else{
@@ -660,7 +658,7 @@ public class AnalisadorSintatico {
 				if(token[0].matches("[Ee]nd")){
 					nivel--;
 					if(nivel ==0)
-						clear_scope(); //DestroÌ as variaveis deste escopo
+						clear_scope(); //Destro√≠ as variaveis deste escopo
 					token = next();
 					System.out.println("Comando composto - OK\n");
 					return true;
@@ -692,7 +690,7 @@ public class AnalisadorSintatico {
 			return false;
 	}
 	
-	/**---EliminaÁ„o da recurs„o a esquerda---**/
+	/**---Elimina√ß√£o da recurs√£o a esquerda---**/
 	private boolean cmdL(){
 		if(token[0].matches(";")){
 			token = next();
@@ -714,13 +712,13 @@ public class AnalisadorSintatico {
 	/**------Comando------**/
 	private boolean command(){
 		if(variable()){
-			if(token[1].matches("Operador de AtribuiÁ„o")){
-				operation_stack.push(token[0]); //Adiciona a operaÁ„o de atribuiÁ„o na pilha de operaÁıes
+			if(token[1].matches("Operador de Atribui√ß√£o")){
+				operation_stack.push(token[0]); //Adiciona a opera√ß√£o de atribui√ß√£o na pilha de opera√ß√µes
 				token = next();
 				if(expression()){
 					//Verificar o tipo aqui
 					if(!verify_operation())
-						return false; //OperaÁ„o inv·lida
+						return false; //Opera√ß√£o inv√°lida
 					
 					System.out.println("Comando - \'OK\'\n");
 					return true;
@@ -760,7 +758,7 @@ public class AnalisadorSintatico {
 					return false;
 				}
 			}else{
-				System.out.println("Erro: Express„o era esperada na linha " + token[2]);
+				System.out.println("Erro: Express√£o era esperada na linha " + token[2]);
 				return false;
 			}
 		}else if(token[0].matches("[Ww]hile")){
@@ -785,7 +783,7 @@ public class AnalisadorSintatico {
 					return false;
 				}
 			}else{
-				System.out.println("Erro: Express„o era esperada na linha " + token[2]);
+				System.out.println("Erro: Express√£o era esperada na linha " + token[2]);
 				return false;
 			}
 		}else if(token[0].matches("[Dd]o")){
@@ -800,7 +798,7 @@ public class AnalisadorSintatico {
 						
 						return true;
 					}else{
-						System.out.println("Erro: Express„o era esperada na linha " + token[2]);
+						System.out.println("Erro: Express√£o era esperada na linha " + token[2]);
 						return false;
 					}
 				}else{
@@ -819,10 +817,10 @@ public class AnalisadorSintatico {
 	private boolean variable(){
 		if(token[1].matches("Identificador")){
 			if(!check_symbol_table(token[0])){ //Verifica se o identificador foi declarado
-				System.out.println("Erro Sem‚ntico: identificador \'" + token[0] + "\' n„o foi declarado");
+				System.out.println("Erro Sem√¢ntico: identificador \'" + token[0] + "\' n√£o foi declarado");
 				return false;
 			}else{
-				if(get_type(token[0]).matches("[Pp]rocedure")) //Verifica se È um identificador de procedure
+				if(get_type(token[0]).matches("[Pp]rocedure")) //Verifica se √© um identificador de procedure
 					return false;
 				else
 					add_pct(token[0]); //Adiciona na Pct o tipo	da variavel
@@ -849,13 +847,13 @@ public class AnalisadorSintatico {
 			return true;
 	}
 	
-	private ArrayList<String> arguments; //Array de argumentos, ser· utilizado para a verificaÁ„o de tipo nas ativaÁoes de procedimento
+	private ArrayList<String> arguments; //Array de argumentos, ser√° utilizado para a verifica√ß√£o de tipo nas ativa√ßoes de procedimento
 	
-	/**------AtivaÁ„o de procedimento------**/
+	/**------Ativa√ß√£o de procedimento------**/
 	private boolean proc_activate(){
 		if(token[1].matches("Identificador")){
 			if(!check_symbol_table(token[0])){
-				System.out.println("Erro Sem‚ntico: identificador \'" + token[0] + "\' n„o foi declarado");
+				System.out.println("Erro Sem√¢ntico: identificador \'" + token[0] + "\' n√£o foi declarado");
 				return false;
 			}
 			String proc_id = token[0]; //Guarda o identificador do procedure
@@ -867,22 +865,22 @@ public class AnalisadorSintatico {
 					//token = next();
 					if(token[0].matches("\\)")){
 						if(!verify_arguments(proc_id)){
-							System.out.println("Erro sem‚ntico: Passagem inv·lida de par‚metros");
+							System.out.println("Erro sem√¢ntico: Passagem inv√°lida de par√¢metros");
 							return false;
 						}
 						token = next();
-						System.out.println("AtivaÁ„o de procedimento - OK\n");
+						System.out.println("Ativa√ß√£o de procedimento - OK\n");
 						return true;
 					}else{
 						System.out.println("Erro: Delimitador \')\' era esperado na linha " + token[2]);
 						return false;
 					}
 				}else{
-					System.out.println("Erro: Lista de express„o era esperada na linha " + token[2]);
+					System.out.println("Erro: Lista de express√£o era esperada na linha " + token[2]);
 					return false;
 				}
 			}else{
-				System.out.println("AtivaÁ„o de procedimento - OK");
+				System.out.println("Ativa√ß√£o de procedimento - OK");
 				return true;
 			}
 		}else{
@@ -905,7 +903,7 @@ public class AnalisadorSintatico {
 		return false;
 	}
 	
-	/**---EliminaÁ„o da recursividade a esquerda---**/
+	/**---Elimina√ß√£o da recursividade a esquerda---**/
 	private boolean exl(){
 		if(token[0].matches(",")){
 			token = next();
@@ -917,7 +915,7 @@ public class AnalisadorSintatico {
 					return false;
 				}
 			}else{
-				System.out.println("Erro: Express„o era esperada na linha " + token[2]);
+				System.out.println("Erro: Express√£o era esperada na linha " + token[2]);
 				return false;
 			}
 		}else{
@@ -927,7 +925,7 @@ public class AnalisadorSintatico {
 	
 	/**----------------------------------------------------------------------------------------------------------------------------------------------**/
 	
-	/**------Express„o------**/
+	/**------Express√£o------**/
 	private boolean expression(){
 		if(simple_exp()){
 			if(relational_op()){
@@ -938,26 +936,26 @@ public class AnalisadorSintatico {
 					else
 						return false;
 				}else{
-					System.out.println("Erro: Express„o era esperada na linha " + token[2]);
+					System.out.println("Erro: Express√£o era esperada na linha " + token[2]);
 					return false;
 				}
 			}else{
-				System.out.println("Express„o - OK\n");
+				System.out.println("Express√£o - OK\n");
 				return true;
 			}
 		}else{
-			System.out.println("Erro: Express„o simples era esperada na linha " + token[2]);
+			System.out.println("Erro: Express√£o simples era esperada na linha " + token[2]);
 			return false;
 		}
 	}
 	
 	/**----------------------------------------------------------------------------------------------------------------------------------------------**/
 	
-	/**------Express„o Simples------**/
+	/**------Express√£o Simples------**/
 	private boolean simple_exp(){
 		if(term()){
 			if(s_exp()){
-				System.out.println("Express„o Simples - \'OK\'");
+				System.out.println("Express√£o Simples - \'OK\'");
 				return true;
 			}else{
 				return false;
@@ -966,7 +964,7 @@ public class AnalisadorSintatico {
 			//token = next();
 			if(term()){
 				if(s_exp()){
-					System.out.println("Express„o Simples - \'OK\'");
+					System.out.println("Express√£o Simples - \'OK\'");
 					return true;
 				}else{
 					return false;
@@ -979,7 +977,7 @@ public class AnalisadorSintatico {
 			return false;
 	}
 	
-	/**---EliminaÁ„o de recursividade a esquerda---**/
+	/**---Elimina√ß√£o de recursividade a esquerda---**/
 	private boolean s_exp(){
 		if(add_op()){
 			if(term()){
@@ -1017,7 +1015,7 @@ public class AnalisadorSintatico {
 		}
 	}
 	
-	/**---EliminaÁ„o da recursividade a esquerda---**/
+	/**---Elimina√ß√£o da recursividade a esquerda---**/
 	private boolean trm(){
 		if(mult_op()){
 			if(factor()){
@@ -1043,7 +1041,7 @@ public class AnalisadorSintatico {
 		
 		if(token[1].matches("Identificador")){
 			if(!check_symbol_table(token[0])){
-				System.out.println("Erro Sem‚ntico: identificador \'" + token[0] + "\' n„o foi declarado");
+				System.out.println("Erro Sem√¢ntico: identificador \'" + token[0] + "\' n√£o foi declarado");
 				return false;
 			}else
 				add_pct(token[0]); //Adiciona o tipo de identificador no pct
@@ -1060,20 +1058,20 @@ public class AnalisadorSintatico {
 						return false;
 					}
 				}else{
-					System.out.println("Erro: Lista de expressıes era esperado na linha " + token[2]);
+					System.out.println("Erro: Lista de express√µes era esperado na linha " + token[2]);
 					return false;
 				}
 			}else{
 				return true;
 			}
 			
-		}else if(token[1].matches("N˙mero Inteiro")){
+		}else if(token[1].matches("N√∫mero Inteiro")){
 			System.out.println("Fator - \'OK\'");
 			type_control_stack.push("integer");
 			token = next();
 			return true;
 			
-		}else if(token[1].matches("N˙mero Real")){
+		}else if(token[1].matches("N√∫mero Real")){
 			System.out.println("Fator - \'OK\'");
 			type_control_stack.push("real");
 			token = next();
@@ -1103,13 +1101,13 @@ public class AnalisadorSintatico {
 					return false;
 				}
 			}else{
-				System.out.println("Erro: Express„o era esperado na linha " + token[2]);
+				System.out.println("Erro: Express√£o era esperado na linha " + token[2]);
 				return false;
 			}
 		}else if(token[0].matches("[Nn]ot")){
 			token = next();
 			if(!get_type(token[0]).equals("boolean")){
-				System.out.println("Erro Sem‚ntico: OperaÁ„o NOT inv·lida");
+				System.out.println("Erro Sem√¢ntico: Opera√ß√£o NOT inv√°lida");
 				return false;
 			}
 			if(factor()){
