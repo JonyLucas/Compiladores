@@ -1,0 +1,13 @@
+program pares;
+var
+  x, y: integer;
+
+begin
+  if (x + 2) <> 0 then
+    x := x + 1;
+  while x <= y do
+  begin
+    x := x + 2;
+  end;
+ 
+end.
