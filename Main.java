@@ -2,13 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import javax.swing.JOptionPane;
-
 import java.util.ArrayList;
-
-import analisador_lexico.AnalisadorLexico;
-import analisador_sintatico.AnalisadorSintatico;
 
 public class Main {
 
@@ -16,7 +11,7 @@ public class Main {
 		
 		try{
 			ArrayList <String[]> lexic_table;
-			String dir = JOptionPane.showInputDialog(null, "Digite o diretório do arquivo");
+			String dir = JOptionPane.showInputDialog(null, "Digite o diretorio do arquivo");
 			FileReader file = new FileReader(dir); //Localizacao do arquivo
 			BufferedReader arq = new BufferedReader(file);
 			
